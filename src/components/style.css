@@ -1,0 +1,12 @@
+.swiper {
+    width: 1240px;
+    margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    .swiper {
+        width: 300px;
+        margin: 30px 40px;
+
+    }
+}
