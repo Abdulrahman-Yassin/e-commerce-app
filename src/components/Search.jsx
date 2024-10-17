@@ -1,6 +1,7 @@
 /*eslint-disable */
 
 import { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import styles from "./Search.module.css";
 
 import "swiper/css";
@@ -31,6 +32,7 @@ import JrZoomSoccerCleats  from "../images/products/15.png"
 import GP11ShooterUSBGamepad  from "../images/products/16.png"
 import QuiltedSatinJacket  from "../images/products/17.png"
 import SearchIcon  from "../images/Vector (2).png"
+
 
 function Search() {
   const ALL_PRODUCT = [
@@ -278,10 +280,13 @@ function Search() {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState([]);
+  const navigate = useNavigate();
 
+  // دالة البحث
   const handleSearch = (event) => {
     const value = event.target.value;
     setSearchTerm(value);
+
     if (value) {
       const filteredResults = ALL_PRODUCT.filter((product) =>
         product.name.toLowerCase().includes(value.toLowerCase())
@@ -292,34 +297,43 @@ function Search() {
     }
   };
 
+  // دالة التنقل لصفحة تفاصيل المنتج
+  const handleProductClick = (product) => {
+    // الانتقال إلى صفحة تفاصيل المنتج
+    navigate(`/${product.name}`);
 
+    // تفريغ حقل البحث وإخفاء النتائج
+    setSearchTerm('');
+    setResults([]);
+  };
 
   return (
     <div>
-        <div className={styles.searchBar}>
-            <input
-                type="text"
-                value={searchTerm}
-                onChange={handleSearch}
-                placeholder="What are you looking for?"
-            />
-            <img src={SearchIcon} alt="" />
-        </div>
+      <div className={styles.searchBar}>
+        <input
+          type="text"
+          value={searchTerm}
+          onChange={handleSearch}
+          placeholder="What are you looking for?"
+        />
+        <img src={SearchIcon} alt="" />
+      </div>
 
       {results.length > 0 && (
-        <div className={styles.results} >
+        <div className={styles.results}>
           {results.map((product) => (
-            <Slider
-              key={product.name}
-              name={product.name}
-              price1={product.price1}
-              price2={product.price2}
-              image={product.image}
-              rating={product.rating}
-              offer={product.offer}
-              review={product.review}
-            />
-          ) )}
+            <div key={product.name} onClick={() => handleProductClick(product)}>
+              <Slider
+                name={product.name}
+                price1={product.price1}
+                price2={product.price2}
+                image={product.image}
+                rating={product.rating}
+                offer={product.offer}
+                review={product.review}
+              />
+            </div>
+          ))}
         </div>
       )}
     </div>
@@ -327,4 +341,5 @@ function Search() {
 }
 
 export default Search;
+
 
